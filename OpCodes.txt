@@ -1,0 +1,139 @@
+OpCodes
+
+The selection of instructions is inspired by the Dis virtual machine and the ARM
+instruction set.
+
+The bytecode format is very similar to that in the Lua virtual machine
+specification.
+
+Format:
+	 --6--- ---8---- ----9---- ----9----
+	/------x--------x---------x---------\
+	|      |        | src1    | src2    |
+	|  op  |  dst   |    /    |    /    |
+	|      |        |    imm1 |    imm2 |
+	\------x--------x---------x---------/
+
+	op is the operation, as specified below.
+
+	dst is generally the register used to store the result.
+
+	src1,2 are the registers of the operands of the given operation.
+
+	The 9-bit src fields have a high bit that is used to indicate if an
+	operation should treat it as an immediate.
+
+	Operations which require the use of either immediates or registers as
+	operands will ignore the immediate bit.
+
+	Some operations support the use of immediates for the operands. In these
+	cases, the high bit of the src registers are set to indicate which to 
+	treat as immediate 8-bit values.
+
+Behavioral descriptions of operations is given using C-like syntax.
+
+R is the register file for the current function and is an array of 256 system words.
+
+[@src1 | #imm1] indicates that operand can be either a register or an
+immediate
+
+Logical - 0b00
+	NOTE: 0b0abc - a OR, b AND, c NEG
+	0b0000.
+	0b0001.	NEG  @dst, [@src1 | #imm1]
+		R[dst] = ~{A}
+			where {A} is either R[src1] or imm1
+	0b0010.	AND  @dst, [@src1 | #imm1], [@src2 | #imm1]
+		R[dst] = {A} & {B}
+			where {A} is either R[src1] or imm1
+			and   {B} is either R[src2] or imm2
+	0b0011.	NAND @dst, [@src1 | #imm1], [@src2 | #imm1]
+		R[dst] = ~({A} & {B}) (or ~{A} | ~{B})
+			where {A} is either R[src1] or imm1
+			and   {B} is either R[src2] or imm2
+	0b0100.	OR   @dst, [@src1 | #imm1], [@src2 | #imm1]
+		R[dst] = {A} | {B}
+			where {A} is either R[src1] or imm1
+			and   {B} is either R[src2] or imm2
+	0b0101.	NOR  @dst, [@src1 | #imm1], [@src2 | #imm1]
+		R[dst] = ~({A} | {B}) (or ~{A} & ~{B})
+			where {A} is either R[src1] or imm1
+			and   {B} is either R[src2] or imm2
+	0b0110.	XOR  @dst, [@src1 | #imm1], [@src2 | #imm1]
+		R[dst] = {A} ^ {B}
+			where {A} is either R[src1] or imm1
+			and   {B} is either R[src2] or imm2
+	0b0111.	XNOR @dst, [@src1 | #imm1], [@src2 | #imm1]
+		R[dst] = ~({A} ^ {B})
+			where {A} is either R[src1] or imm1
+			and   {B} is either R[src2] or imm2
+
+	0b1000.	LLSH 
+	0b1001.	LRSH 
+	0b1010.	RROT 
+	0b1011.	ARSH 
+
+	NOTE: 0b11ab - a 0/1 Leading/Trailing, b 0/1 Zeros/Ones
+	0b1100.	CLZ  
+	0b1101.	CLO  
+	0b1110.	CTZ  
+	0b1111.	CTO  
+
+Control flow - 0b01
+	0b0000.	CALL 
+	0b0001.	RET  
+
+	0b0010.
+	0b0011.
+	0b0100.
+	0b0101.
+	0b0110.
+	0b0111.
+
+	NOTE: 0b1abc - a GT, b LT, c EQ
+	0b1000.
+	0b1001.	BEQ  
+	0b1010.	BLT  
+	0b1011.	BLE  
+	0b1100.	BGT  
+	0b1101.	BGE  
+	0b1110.	BNE  
+	0b1111.	JUMP 
+
+Free Section - 0b10
+	0b0000.
+	0b0001.
+	0b0010.
+	0b0011.
+	0b0100.
+	0b0101.
+	0b0110.
+	0b0111.
+	0b1000.
+	0b1001.
+	0b1010.
+	0b1011.
+	0b1100.
+	0b1101.
+	0b1110.
+	0b1111.
+
+Arithmetic - 0b110
+	0b000.	ADD  
+	0b001.	SUB  
+	0b010.
+	0b011.
+	0b100.	MUL  
+	0b101.	DIV  
+	0b110.	MOD  
+	0b111.
+
+Memory - 0b111
+	0b000.	NEW  
+	0b001.	NEWZ 
+	0b010.	FREE 
+	0b011.	MOV  
+	0b100.	LOAD 
+	0b101.	STOR 
+	0b110.
+	0b111.
