@@ -35,6 +35,16 @@ runtime.
 
 See `README.md` in the `vm` directory.
 
+The Harness
+===========
+
+The harness is designed to allow uploading executables to the VM on the
+BeagleBoard. It will also be used as both a local and a remote REPL. Ideally 
+this will be written in Beagle Lang with minimal C to manage talking to the
+serial port. 
+
+See `README.md` in the `harness` directory.
+
 -----
 
 This is just for fun. Any ideas or suggestions are welcome.
