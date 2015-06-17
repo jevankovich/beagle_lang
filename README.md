@@ -1,7 +1,7 @@
-What is Beagle Lang?
+What is Yttrium?
 ====================
 
-Beagle Lang (temporary name) is intended to be a language and virtual machine 
+Yttrium is intended to be a language and virtual machine 
 capable of being used for systems-level programming. To facilitate this, it
 will be developed alongside an OS.
 
@@ -21,9 +21,9 @@ was chosen as the target and virtual machines will be made for the various
 targets.
 
 In order to bootstrap the compiler, an interpreter will be created to allow a
-compiler to be written in Beagle Lang.
+compiler to be written in Yttrium.
 
-See `README.md` in the `compiler` and `interpreter` directories for more
+`README.md` in the `compiler` and `interpreter` directories for more
 information.
 
 The VM
@@ -40,7 +40,7 @@ The Harness
 
 The harness is designed to allow uploading executables to the VM on the
 BeagleBoard. It will also be used as both a local and a remote REPL. Ideally 
-this will be written in Beagle Lang with minimal C to manage talking to the
+this will be written in Yttrium with minimal C to manage talking to the
 serial port. 
 
 See `README.md` in the `harness` directory.

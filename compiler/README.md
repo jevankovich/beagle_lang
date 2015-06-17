@@ -1,7 +1,7 @@
 General
 =======
 
-Beagle Lang will be self-hosting. Since the language will also be used to fully
+Yttrium will be self-hosting. Since the language will also be used to fully
 express its type system, the compiler will need to access the runtime and the 
 runtime needs to be able to access the compiler.
 

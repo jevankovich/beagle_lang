@@ -33,7 +33,7 @@ Linux. It may or may not compile on other Unix-y systems and might work on
 Windows with Cygwin.
 
 The design of this runtime will be focused on clearly documenting the intended
-behavior of a Beagle Lang VM and will only care about performance as long as it
+behavior of a Yttrium VM and will only care about performance as long as it
 doesn't impede clarity.
 
 Beagle VM
